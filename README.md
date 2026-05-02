@@ -1,3 +1,12 @@
+---
+title: Cutis AI
+emoji: 🩺
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # Cutis AI - Skin Disease Detection
 
 A Deep Learning based system for detecting skin diseases.
