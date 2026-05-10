@@ -253,3 +253,78 @@
         }, 1500);
     });
 })();
+
+// Mobile navigation (hamburger) logic
+(() => {
+    "use strict";
+    const topbar = document.querySelector(".topbar");
+    const toggle = document.querySelector(".nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    if (!topbar || !toggle || !navLinks) return;
+
+    const mobileQuery = window.matchMedia("(max-width: 768px)");
+
+    function closeMenu() {
+        topbar.classList.remove("nav-open");
+        toggle.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleMenu() {
+        const open = topbar.classList.toggle("nav-open");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    toggle.addEventListener("click", toggleMenu);
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+            if (mobileQuery.matches) closeMenu();
+        });
+    });
+
+    window.addEventListener("resize", () => {
+        if (!mobileQuery.matches) closeMenu();
+    });
+})();
+
+// Hero image placement: move below tagline on mobile
+(() => {
+    "use strict";
+    const heroText = document.querySelector(".hero-text");
+    const tagLine = document.querySelector(".tag-line");
+    const introPara = document.querySelector(".intro-p");
+    const contentRight = document.querySelector(".content-right");
+    if (!heroText || !tagLine || !contentRight) return;
+
+    const originalParent = contentRight.parentElement;
+    const originalNextSibling = contentRight.nextElementSibling;
+    const mobileQuery = window.matchMedia("(max-width: 768px)");
+
+    function placeForMobile() {
+        if (!introPara) {
+            heroText.appendChild(contentRight);
+            return;
+        }
+        heroText.insertBefore(contentRight, introPara);
+    }
+
+    function placeForDesktop() {
+        if (!originalParent) return;
+        if (originalNextSibling) {
+            originalParent.insertBefore(contentRight, originalNextSibling);
+            return;
+        }
+        originalParent.appendChild(contentRight);
+    }
+
+    function syncHeroLayout() {
+        if (mobileQuery.matches) {
+            placeForMobile();
+        } else {
+            placeForDesktop();
+        }
+    }
+
+    syncHeroLayout();
+    window.addEventListener("resize", syncHeroLayout);
+})();
